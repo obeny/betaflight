@@ -445,7 +445,7 @@ all_all: $(VALID_TARGETS)
 
 $(BASE_TARGETS):
 	$(V0) @echo "Building $@" && \
-	$(MAKE) hex TARGET=$@ && \
+	$(MAKE) binary hex TARGET=$@ && \
 	echo "Building $@ succeeded."
 
 $(NOBUILD_TARGETS):
