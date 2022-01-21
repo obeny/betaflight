@@ -59,7 +59,7 @@ endif
 
 $(BASE_CONFIGS):
 	@echo "Building target config $@"
-	$(V0) $(MAKE) -j hex CONFIG=$@
+	$(V0) $(MAKE) -j binary hex CONFIG=$@
 	@echo "Building target config $@ succeeded."
 
 ## <CONFIG>_rev    : build configured target and add revision to filename

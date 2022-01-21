@@ -469,7 +469,7 @@ all: $(CI_TARGETS)
 
 $(BASE_TARGETS):
 	$(V0) @echo "Building target $@" && \
-	$(MAKE) hex TARGET=$@ && \
+	$(MAKE) binary hex TARGET=$@ && \
 	echo "Building $@ succeeded."
 
 TARGETS_CLEAN = $(addsuffix _clean,$(BASE_TARGETS))
