@@ -157,6 +157,7 @@
 #include "osd/osd.h"
 #include "osd/osd_elements.h"
 #include "osd/osd_warnings.h"
+#include "osd/osd_text.h"
 
 #include "pg/motor.h"
 #include "pg/stats.h"
@@ -1647,7 +1648,15 @@ static void osdElementStickOverlay(osdElementParms_t *element)
 
 static void osdElementThrottlePosition(osdElementParms_t *element)
 {
-    tfp_sprintf(element->buff, "%c%3d", SYM_THR, calculateThrottlePercent());
+    const uint8_t throttleValue = calculateThrottlePercent();
+    if (throttleValue >= OSD_KACK_LEVEL)
+    {
+        tfp_sprintf(element->buff, "KACK");
+    }
+    else
+    {
+        tfp_sprintf(element->buff, "%c%3d", SYM_THR, throttleValue);
+    }
 }
 
 static void osdElementTimer(osdElementParms_t *element)
