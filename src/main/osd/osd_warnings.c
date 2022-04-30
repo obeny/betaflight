@@ -64,7 +64,9 @@
 #include "sensors/battery.h"
 #include "sensors/sensors.h"
 
-const char CRASH_FLIP_WARNING[] = "> CRASH FLIP <";
+#include "osd/osd_text.h"
+
+const char CRASH_FLIP_WARNING[] = OSD_WARN_CRASH_FLIP;
 
 void renderOsdWarning(char *warningText, bool *blinking, uint8_t *displayAttr)
 {
@@ -141,7 +143,7 @@ void renderOsdWarning(char *warningText, bool *blinking, uint8_t *displayAttr)
             *displayAttr = DISPLAYPORT_SEVERITY_INFO;
             return;
         } else if (!ARMING_FLAG(ARMED)) { // if disarmed, but crash flip mode is activated
-            tfp_sprintf(warningText, "CRASH FLIP SWITCH");
+            tfp_sprintf(warningText, OSD_WARN_CRASH_FLIP_SWITCH);
             *displayAttr = DISPLAYPORT_SEVERITY_INFO;
             return;
         }
@@ -207,7 +209,7 @@ void renderOsdWarning(char *warningText, bool *blinking, uint8_t *displayAttr)
 #endif // USE_RX_LINK_QUALITY_INFO
 
     if (osdWarnGetState(OSD_WARNING_BATTERY_CRITICAL) && batteryState == BATTERY_CRITICAL) {
-        tfp_sprintf(warningText, " LAND NOW");
+        tfp_sprintf(warningText, OSD_WARN_LAND_NOW);
         *displayAttr = DISPLAYPORT_SEVERITY_CRITICAL;
         *blinking = true;
         return;
@@ -371,7 +373,7 @@ void renderOsdWarning(char *warningText, bool *blinking, uint8_t *displayAttr)
 #endif
 
     if (osdWarnGetState(OSD_WARNING_BATTERY_WARNING) && batteryState == BATTERY_WARNING) {
-        tfp_sprintf(warningText, "LOW BATTERY");
+        tfp_sprintf(warningText, OSD_WARN_LOW_BATTERY);
         *displayAttr = DISPLAYPORT_SEVERITY_WARNING;
         *blinking = true;
         return;
