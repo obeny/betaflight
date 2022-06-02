@@ -1514,6 +1514,8 @@ static void osdElementStickOverlay(osdElementParms_t *element)
 
 static void osdElementThrottlePosition(osdElementParms_t *element)
 {
+    static bool previousKaack = false;
+
     const uint8_t throttleValue = calculateThrottlePercent();
     if (throttleValue >= OSD_KACK_LEVEL)
     {
@@ -1522,6 +1524,18 @@ static void osdElementThrottlePosition(osdElementParms_t *element)
     else
     {
         tfp_sprintf(element->buff, "%c%3d", SYM_THR, throttleValue);
+    }
+
+    if (ARMING_FLAG(ARMED)) {
+        if (throttleValue >= OSD_KACK_LEVEL) {
+            if (!previousKaack) {
+                osdGetStats()->extra_kaacks++;
+            }
+
+            previousKaack = true;
+        } else {
+            previousKaack = false;
+        }
     }
 }
 

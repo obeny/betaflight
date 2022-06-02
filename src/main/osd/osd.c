@@ -195,6 +195,9 @@ const osd_stats_e osdStatsDisplayOrder[OSD_STAT_COUNT] = {
     OSD_STAT_TOTAL_TIME,
     OSD_STAT_TOTAL_DIST,
     OSD_STAT_WATT_HOURS_DRAWN,
+    OSD_STAT_EXTRA_KAACK,
+    OSD_STAT_EXTRA_KAACK_TIME,
+    OSD_STAT_EXTRA_AVG_THROTTLE
 };
 
 // Group elements in a number of groups to reduce task scheduling overhead
@@ -331,14 +334,12 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
 {
     // Enable the default stats
     osdConfig->enabled_stats = 0; // reset all to off and enable only a few initially
-    osdStatSetState(OSD_STAT_MAX_SPEED, true);
-    osdStatSetState(OSD_STAT_MIN_BATTERY, true);
-    osdStatSetState(OSD_STAT_MIN_RSSI, true);
-    osdStatSetState(OSD_STAT_MAX_CURRENT, true);
-    osdStatSetState(OSD_STAT_USED_MAH, true);
-    osdStatSetState(OSD_STAT_BLACKBOX, true);
-    osdStatSetState(OSD_STAT_BLACKBOX_NUMBER, true);
     osdStatSetState(OSD_STAT_TIMER_2, true);
+    osdStatSetState(OSD_STAT_MIN_BATTERY, true);
+    osdStatSetState(OSD_STAT_MIN_LINK_QUALITY, true);
+    osdStatSetState(OSD_STAT_EXTRA_KAACK, true);
+    osdStatSetState(OSD_STAT_EXTRA_KAACK_TIME, true);
+    osdStatSetState(OSD_STAT_EXTRA_AVG_THROTTLE, true);
 
     osdConfig->units = UNIT_METRIC;
 
@@ -564,6 +565,10 @@ static void osdResetStats(void)
     stats.min_link_quality = (linkQualitySource == LQ_SOURCE_NONE) ? 99 : 100; // percent
     stats.min_rssi_dbm = CRSF_RSSI_MAX;
     stats.min_rsnr = CRSF_SNR_MAX;
+    stats.extra_kaacks = 0;
+    stats.extra_kaack_time = 0;
+    stats.extra_throttle_sum = 0;
+    stats.extra_throttle_count = 0;
 }
 
 #if defined(USE_ESC_SENSOR) || defined(USE_DSHOT_TELEMETRY)
@@ -977,6 +982,26 @@ static bool osdDisplayStat(int statistic, uint8_t displayRow)
         osdDisplayStatisticLabel(midCol, displayRow, "TOTAL DISTANCE", buff);
         return true;
 #endif
+    case OSD_STAT_EXTRA_KAACK:
+        itoa(stats.extra_kaacks, buff, 10);
+        osdDisplayStatisticLabel(midCol, displayRow, "KAACKS", buff);
+        return true;
+
+    case OSD_STAT_EXTRA_KAACK_TIME:
+        {
+            int seconds = stats.extra_kaack_time / 1000000;
+            const int minutes = seconds / 60;
+            seconds = seconds % 60;
+            tfp_sprintf(buff, "%02d:%02d", minutes, seconds);
+        }
+
+        osdDisplayStatisticLabel(midCol, displayRow, "KAACK TIME", buff);
+        return true;
+
+    case OSD_STAT_EXTRA_AVG_THROTTLE:
+        itoa(stats.extra_throttle_sum / stats.extra_throttle_count, buff, 10);
+        osdDisplayStatisticLabel(midCol, displayRow, "AVG THROTTLE", buff);
+        return true;
     }
     return false;
 }
@@ -1176,6 +1201,16 @@ STATIC_UNIT_TESTED bool osdProcessStats1(timeUs_t currentTimeUs)
         timeUs_t deltaT = currentTimeUs - lastTimeUs;
         osdFlyTime += deltaT;
         stats.armed_time += deltaT;
+
+        const uint8_t throttleValue = calculateThrottlePercent();
+
+        stats.extra_throttle_count ++;
+        stats.extra_throttle_sum += throttleValue;
+
+        if (100 == throttleValue) {
+            stats.extra_kaack_time += deltaT;
+        }
+
     } else if (osdStatsEnabled) {  // handle showing/hiding stats based on OSD disable switch position
         if (displayIsGrabbed(osdDisplayPort)) {
             osdStatsEnabled = false;
