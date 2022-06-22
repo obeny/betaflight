@@ -1077,7 +1077,9 @@ const clivalue_t valueTable[] = {
     { PARAM_NAME_DTERM_NOTCH_HZ,        VAR_UINT16 | PROFILE_VALUE, .config.minmaxUnsigned = { 0, LPF_MAX_HZ }, PG_PID_PROFILE, offsetof(pidProfile_t, dterm_notch_hz) },
     { PARAM_NAME_DTERM_NOTCH_CUTOFF,    VAR_UINT16 | PROFILE_VALUE, .config.minmaxUnsigned = { 0, LPF_MAX_HZ }, PG_PID_PROFILE, offsetof(pidProfile_t, dterm_notch_cutoff) },
 #if defined(USE_BATTERY_VOLTAGE_SAG_COMPENSATION)
-    { PARAM_NAME_VBAT_SAG_COMPENSATION, VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 0, 150 }, PG_PID_PROFILE, offsetof(pidProfile_t, vbat_sag_compensation) },
+    { PARAM_NAME_VBAT_SAG_COMPENSATION, VAR_UINT8   | PROFILE_VALUE, .config.minmaxUnsigned = { 0, 150 }, PG_PID_PROFILE, offsetof(pidProfile_t, vbat_sag_compensation) },
+    { PARAM_NAME_VBAT_SAG_VOLT_HIGH,    VAR_UINT16  | PROFILE_VALUE, .config.minmaxUnsigned = { VBAT_CELL_VOLTAGE_RANGE_MIN, VBAT_CELL_VOLTAGE_RANGE_MAX }, PG_PID_PROFILE, offsetof(pidProfile_t, vbat_sag_volt_high) },
+    { PARAM_NAME_VBAT_SAG_VOLT_LOW,     VAR_UINT16  | PROFILE_VALUE, .config.minmaxUnsigned = { VBAT_CELL_VOLTAGE_RANGE_MIN, VBAT_CELL_VOLTAGE_RANGE_MAX }, PG_PID_PROFILE, offsetof(pidProfile_t, vbat_sag_volt_low) },
 #endif
     { PARAM_NAME_PID_AT_MIN_THROTTLE, VAR_UINT8 | PROFILE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_OFF_ON }, PG_PID_PROFILE, offsetof(pidProfile_t, pidAtMinThrottle) },
     { PARAM_NAME_ANTI_GRAVITY_GAIN,   VAR_UINT8 | PROFILE_VALUE, .config.minmaxUnsigned = { ITERM_ACCELERATOR_GAIN_OFF, ITERM_ACCELERATOR_GAIN_MAX }, PG_PID_PROFILE, offsetof(pidProfile_t, anti_gravity_gain) },

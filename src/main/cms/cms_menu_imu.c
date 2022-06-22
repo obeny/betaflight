@@ -533,6 +533,8 @@ static uint8_t  cmsx_d_min_advance;
 
 #ifdef USE_BATTERY_VOLTAGE_SAG_COMPENSATION
 static uint8_t  cmsx_vbat_sag_compensation;
+static uint16_t cmsx_vbat_sag_volt_high;
+static uint16_t cmsx_vbat_sag_volt_low;
 #endif
 
 #ifdef USE_ITERM_RELAX
@@ -596,6 +598,8 @@ static const void *cmsx_profileOtherOnEnter(displayPort_t *pDisp)
 
 #ifdef USE_BATTERY_VOLTAGE_SAG_COMPENSATION
     cmsx_vbat_sag_compensation = pidProfile->vbat_sag_compensation;
+    cmsx_vbat_sag_volt_high = pidProfile->vbat_sag_volt_high;
+    cmsx_vbat_sag_volt_low = pidProfile->vbat_sag_volt_low;
 #endif
     cmsx_tpa_rate = pidProfile->tpa_rate;
     cmsx_tpa_breakpoint = pidProfile->tpa_breakpoint;
@@ -647,6 +651,8 @@ static const void *cmsx_profileOtherOnExit(displayPort_t *pDisp, const OSD_Entry
 
 #ifdef USE_BATTERY_VOLTAGE_SAG_COMPENSATION
     pidProfile->vbat_sag_compensation = cmsx_vbat_sag_compensation;
+    pidProfile->vbat_sag_volt_high = cmsx_vbat_sag_volt_high;
+    pidProfile->vbat_sag_volt_low = cmsx_vbat_sag_volt_low;
 #endif
     pidProfile->tpa_rate = cmsx_tpa_rate;
     pidProfile->tpa_breakpoint = cmsx_tpa_breakpoint;
@@ -699,6 +705,8 @@ static const OSD_Entry cmsx_menuProfileOtherEntries[] = {
 
 #ifdef USE_BATTERY_VOLTAGE_SAG_COMPENSATION
     { "VBAT_SAG_COMP", OME_UINT8,  NULL, &(OSD_UINT8_t) { &cmsx_vbat_sag_compensation, 0, 150, 1 } },
+    { "VBAT_SAG_VOLT_HI", OME_UINT16,  NULL, &(OSD_UINT16_t) { &cmsx_vbat_sag_volt_high, VBAT_CELL_VOLTAGE_RANGE_MIN, VBAT_CELL_VOLTAGE_RANGE_MAX, 1 } },
+    { "VBAT_SAG_VOLT_LO", OME_UINT16,  NULL, &(OSD_UINT16_t) { &cmsx_vbat_sag_volt_low, VBAT_CELL_VOLTAGE_RANGE_MIN, VBAT_CELL_VOLTAGE_RANGE_MAX, 1 } },
 #endif
 
     { "TPA RATE",  OME_FLOAT,  NULL, &(OSD_FLOAT_t) { &cmsx_tpa_rate,          0,  100,  1, 10} },
