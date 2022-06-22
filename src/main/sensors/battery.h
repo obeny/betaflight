@@ -27,9 +27,6 @@
 #include "sensors/current.h"
 #include "sensors/voltage.h"
 
-//TODO: Make the 'cell full' voltage user adjustble
-#define CELL_VOLTAGE_FULL_CV 420
-
 #define VBAT_CELL_VOLTAGE_RANGE_MIN 220
 #define VBAT_CELL_VOLTAGE_RANGE_MAX 450
 #define VBAT_CELL_VOLTAGE_DEFAULT_MIN 330
