@@ -225,7 +225,8 @@ CC_NO_OPTIMISATION      :=
 #
 TEMPORARY_FLAGS :=
 
-CFLAGS_WARN  := -Wall -Wextra -Werror -Wpedantic -Wold-style-definition -Wunsafe-loop-optimizations -Wdouble-promotion
+CFLAGS_WARN  := -Wall -Wextra -Werror -Wpedantic -Wold-style-definition -Wunsafe-loop-optimizations -Wdouble-promotion \
+	-Wunused-parameter -Wuninitialized -Wstringop-truncation -Wduplicated-cond
 LDFLAGS_WARN :=
 
 CFLAGS     += $(ARCH_FLAGS) \
