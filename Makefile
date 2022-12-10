@@ -239,6 +239,8 @@ CFLAGS     += $(ARCH_FLAGS) \
               -ffunction-sections \
               -fdata-sections \
               -fno-common \
+              -ftree-vectorize \
+              -fweb \
               $(TEMPORARY_FLAGS) \
               $(DEVICE_FLAGS) \
               -D_GNU_SOURCE \
@@ -261,9 +263,11 @@ ASFLAGS     = $(ARCH_FLAGS) \
 ifeq ($(LD_FLAGS),)
 LD_FLAGS     = -lm \
               -nostartfiles \
+              -nostdlib \
               --specs=nano.specs \
               -lc \
               -lnosys \
+              -Wl,-O1 \
               $(ARCH_FLAGS) \
               $(LTO_FLAGS) \
               $(DEBUG_FLAGS) \
