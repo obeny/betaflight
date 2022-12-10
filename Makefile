@@ -150,7 +150,7 @@ else
 ifeq ($(DEBUG),INFO)
 DEBUG_FLAGS            = -ggdb2
 endif
-OPTIMISATION_BASE     := -flto -fuse-linker-plugin -ffast-math -fmerge-all-constants
+OPTIMISATION_BASE     := -flto=auto -fuse-linker-plugin -ffast-math -fmerge-all-constants
 OPTIMISE_DEFAULT      := -O2
 OPTIMISE_SPEED        := -Ofast
 OPTIMISE_SIZE         := -Os
@@ -249,8 +249,9 @@ CC_NO_OPTIMISATION      :=
 TEMPORARY_FLAGS :=
 
 CFLAGS_WARN  := -Wall -Wextra -Werror -Wpedantic -Wold-style-definition -Wunsafe-loop-optimizations -Wdouble-promotion \
-	-Wunused-parameter -Wuninitialized -Wstringop-truncation -Wduplicated-cond
-LDFLAGS_WARN :=
+	-Wunused-parameter -Wuninitialized -Wstringop-truncation -Wduplicated-cond -Wno-stringop-overflow
+LDFLAGS_WARN := -Wno-stringop-overflow
+
 
 CFLAGS     += $(ARCH_FLAGS) \
               $(addprefix -D,$(OPTIONS)) \
