@@ -248,15 +248,15 @@ CC_NO_OPTIMISATION      :=
 #
 TEMPORARY_FLAGS :=
 
-EXTRA_WARNING_FLAGS := -Wold-style-definition
+CFLAGS_WARN  := -Wall -Wextra -Werror -Wpedantic -Wold-style-definition -Wunsafe-loop-optimizations -Wdouble-promotion
+LDFLAGS_WARN :=
 
 CFLAGS     += $(ARCH_FLAGS) \
               $(addprefix -D,$(OPTIONS)) \
               $(addprefix -I,$(INCLUDE_DIRS)) \
               $(DEBUG_FLAGS) \
               -std=gnu17 \
-              -Wall -Wextra -Werror -Wpedantic -Wunsafe-loop-optimizations -Wdouble-promotion \
-              $(EXTRA_WARNING_FLAGS) \
+              $(CFLAGS_WARN) \
               -ffunction-sections \
               -fdata-sections \
               -fno-common \
@@ -296,7 +296,8 @@ LD_FLAGS     = -lm \
               -Wl,--no-wchar-size-warning \
               -Wl,--print-memory-usage \
               -T$(LD_SCRIPT) \
-               $(EXTRA_LD_FLAGS)
+              $(EXTRA_LD_FLAGS) \
+              $(LDFLAGS_WARN)
 endif
 
 ###############################################################################
