@@ -52,7 +52,7 @@ FLASH_SIZE ?=
 # Things that need to be maintained as the source changes
 #
 
-FORKNAME      = betaflight
+FORKNAME      = betaflight_obeny
 
 # Working directories
 ROOT            := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
@@ -232,6 +232,8 @@ READELF     := $(ARM_SDK_PREFIX)readelf
 SIZE        := $(ARM_SDK_PREFIX)size
 DFUSE-PACK  := src/utils/dfuse-pack.py
 
+GCC_VER     := $(shell $(CROSS_CC) -dumpversion)
+
 #
 # Tool options.
 #
@@ -316,7 +318,8 @@ ifeq ($(REV),yes)
 TARGET_NAME := $(TARGET_NAME)_$(REVISION)
 endif
 
-TARGET_FULLNAME = $(FORKNAME)_$(FC_VER)_$(TARGET_NAME)
+#TARGET_FULLNAME = $(FORKNAME)_$(FC_VER)_$(TARGET_NAME)
+TARGET_FULLNAME = $(FORKNAME)-gcc$(GCC_VER)_$(FC_VER)_$(TARGET_NAME)_$(REVISION)
 #
 # Things we will build
 #
