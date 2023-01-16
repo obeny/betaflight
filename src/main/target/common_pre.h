@@ -384,6 +384,7 @@ extern uint8_t _dmaram_end__;
 #define USE_OSD
 #define USE_OSD_SD
 #define USE_OSD_HD
+#define USE_LED_STRIP
 #define USE_BLACKBOX
 
 #if TARGET_FLASH_SIZE > 512
@@ -414,7 +415,6 @@ extern uint8_t _dmaram_end__;
 #define USE_ESCSERIAL_SIMONK
 #define USE_GPS
 #define USE_GPS_PLUS_CODES
-#define USE_LED_STRIP
 #define USE_SERIAL_4WAY_SK_BOOTLOADER
 #endif
 
@@ -480,6 +480,8 @@ extern uint8_t _dmaram_end__;
 #define USE_GYRO_LPF2
 #define USE_DYN_LPF
 #define USE_D_MIN
+#define USE_LAUNCH_CONTROL
+#define USE_CAMERA_CONTROL
 
 #define USE_THROTTLE_BOOST
 #define USE_INTEGRATED_YAW_CONTROL
