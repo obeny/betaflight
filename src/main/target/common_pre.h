@@ -203,6 +203,7 @@
 #define USE_OSD
 #define USE_OSD_SD
 #define USE_OSD_HD
+#define USE_LED_STRIP
 #define USE_BLACKBOX
 
 #if TARGET_FLASH_SIZE >= 1024
@@ -318,6 +319,7 @@
 #define USE_GYRO_LPF2
 #define USE_DYN_LPF
 #define USE_D_MIN
+#define USE_LAUNCH_CONTROL
 
 #define USE_THROTTLE_BOOST
 #define USE_INTEGRATED_YAW_CONTROL
