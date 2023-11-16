@@ -206,7 +206,10 @@
 #define USE_LED_STRIP
 #define USE_BLACKBOX
 
-#if TARGET_FLASH_SIZE >= 1024
+#define USE_OSD_QUICK_MENU
+#define USE_RC_STATS
+
+#if TARGET_FLASH_SIZE > 512
 
 #if defined(USE_SERIALRX)
 
