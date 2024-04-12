@@ -16,9 +16,9 @@
 ##############################
 
 # Set up ARM (STM32) SDK
-ARM_SDK_DIR ?= $(TOOLS_DIR)/gcc-arm-none-eabi-10.3-2021.10
+#ARM_SDK_DIR ?= $(TOOLS_DIR)/gcc-arm-none-eabi-10.3-2021.10
 # Checked below, Should match the output of $(shell arm-none-eabi-gcc -dumpversion)
-GCC_REQUIRED_VERSION ?= 10.3.1
+#GCC_REQUIRED_VERSION ?= 10.3.1
 
 .PHONY: arm_sdk_version
 
@@ -44,32 +44,32 @@ endif
 
 ARM_SDK_FILE := $(notdir $(ARM_SDK_URL))
 
-SDK_INSTALL_MARKER := $(ARM_SDK_DIR)/bin/arm-none-eabi-gcc-$(GCC_REQUIRED_VERSION)
+#SDK_INSTALL_MARKER := $(ARM_SDK_DIR)/bin/arm-none-eabi-gcc-$(GCC_REQUIRED_VERSION)
 
 # order-only prereq on directory existance:
 arm_sdk_install: | $(TOOLS_DIR)
 arm_sdk_install: arm_sdk_download $(SDK_INSTALL_MARKER)
 
-$(SDK_INSTALL_MARKER):
-ifneq ($(OSFAMILY), windows)
-        # binary only release so just extract it
-	$(V1) tar -C $(TOOLS_DIR) -xjf "$(DL_DIR)/$(ARM_SDK_FILE)"
-else
-	$(V1) unzip -q -d $(ARM_SDK_DIR) "$(DL_DIR)/$(ARM_SDK_FILE)"
-endif
+#$(SDK_INSTALL_MARKER):
+#ifneq ($(OSFAMILY), windows)
+#        # binary only release so just extract it
+#	$(V1) tar -C $(TOOLS_DIR) -xjf "$(DL_DIR)/$(ARM_SDK_FILE)"
+#else
+#	$(V1) unzip -q -d $(ARM_SDK_DIR) "$(DL_DIR)/$(ARM_SDK_FILE)"
+#endif
 
-.PHONY: arm_sdk_download
-arm_sdk_download: | $(DL_DIR)
-arm_sdk_download: $(DL_DIR)/$(ARM_SDK_FILE)
-$(DL_DIR)/$(ARM_SDK_FILE):
-    # download the source only if it's newer than what we already have
-	$(V1) curl -L -k -o "$@" $(if $(wildcard $@), -z "$@",) "$(ARM_SDK_URL)"
+#.PHONY: arm_sdk_download
+#arm_sdk_download: | $(DL_DIR)
+#arm_sdk_download: $(DL_DIR)/$(ARM_SDK_FILE)
+#$(DL_DIR)/$(ARM_SDK_FILE):
+#    # download the source only if it's newer than what we already have
+#	$(V1) curl -L -k -o "$@" $(if $(wildcard $@), -z "$@",) "$(ARM_SDK_URL)"
 
 ## arm_sdk_clean     : Uninstall Arm SDK
-.PHONY: arm_sdk_clean
-arm_sdk_clean:
-	$(V1) [ ! -d "$(ARM_SDK_DIR)" ] || $(RM) -r $(ARM_SDK_DIR)
-	$(V1) [ ! -d "$(DL_DIR)" ] || $(RM) -r $(DL_DIR)
+#.PHONY: arm_sdk_clean
+#arm_sdk_clean:
+#	$(V1) [ ! -d "$(ARM_SDK_DIR)" ] || $(RM) -r $(ARM_SDK_DIR)
+#	$(V1) [ ! -d "$(DL_DIR)" ] || $(RM) -r $(DL_DIR)
 
 .PHONY: openocd_win_install
 
@@ -258,19 +258,20 @@ zip_clean:
 #
 ##############################
 
-ifeq ($(shell [ -d "$(ARM_SDK_DIR)" ] && echo "exists"), exists)
-  ARM_SDK_PREFIX := $(ARM_SDK_DIR)/bin/arm-none-eabi-
-else ifeq (,$(filter %_install test% clean% %-print checks help configs, $(MAKECMDGOALS)))
-  GCC_VERSION = $(shell arm-none-eabi-gcc -dumpversion)
-  ifeq ($(GCC_VERSION),)
-    $(error **ERROR** arm-none-eabi-gcc not in the PATH. Run 'make arm_sdk_install' to install automatically in the tools folder of this repo)
-  else ifneq ($(GCC_VERSION), $(GCC_REQUIRED_VERSION))
-    $(error **ERROR** your arm-none-eabi-gcc is '$(GCC_VERSION)', but '$(GCC_REQUIRED_VERSION)' is expected. Override with 'GCC_REQUIRED_VERSION' in mk/local.mk or run 'make arm_sdk_install' to install the right version automatically in the tools folder of this repo)
-  endif
+#ifeq ($(shell [ -d "$(ARM_SDK_DIR)" ] && echo "exists"), exists)
+#  ARM_SDK_PREFIX := $(ARM_SDK_DIR)/bin/arm-none-eabi-
+#else ifeq (,$(filter %_install test% clean% %-print checks help configs, $(MAKECMDGOALS)))
+#  GCC_VERSION = $(shell arm-none-eabi-gcc -dumpversion)
+#  ifeq ($(GCC_VERSION),)
+#    $(error **ERROR** arm-none-eabi-gcc not in the PATH. Run 'make arm_sdk_install' to install automatically in the tools folder of this repo)
+#  else ifneq ($(GCC_VERSION), $(GCC_REQUIRED_VERSION))
+#    $(error **ERROR** your arm-none-eabi-gcc is '$(GCC_VERSION)', but '$(GCC_REQUIRED_VERSION)' is expected. Override with 'GCC_REQUIRED_VERSION' in mk/local.mk or run 'make arm_sdk_install' to install the right version automatically in the tools folder of this repo)
+#  endif
 
-  # ARM toolchain is in the path, and the version is what's required.
-  ARM_SDK_PREFIX ?= arm-none-eabi-
-endif
+#  # ARM toolchain is in the path, and the version is what's required.
+#  ARM_SDK_PREFIX ?= arm-none-eabi-
+#endif
+ARM_SDK_PREFIX = arm-none-eabi-
 
 ifeq ($(shell [ -d "$(ZIP_DIR)" ] && echo "exists"), exists)
   export ZIPBIN := $(ZIP_DIR)/zip
